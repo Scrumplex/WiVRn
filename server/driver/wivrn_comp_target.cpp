@@ -501,6 +501,7 @@ static VkResult comp_wivrn_present(struct comp_target * ct,
 	        .commandBufferCount = 1,
 	        .pCommandBuffers = &*command_buffer,
 	};
+	std::vector<vk::Semaphore> signal_semaphore;
 
 	if (cn->c->base.slot.layer_count == 0 or not cn->cnx->get_offset())
 	{
@@ -520,15 +521,22 @@ static VkResult comp_wivrn_present(struct comp_target * ct,
 	yuv.record_draw_commands(command_buffer);
 	for (auto & encoder: cn->encoders)
 	{
-		encoder->PresentImage(yuv, command_buffer);
+		vk::Semaphore sem = encoder->PresentImage(yuv, command_buffer);
+		if (sem)
+			signal_semaphore.push_back(sem);
 	}
 	command_buffer.end();
+	submit_info.setSignalSemaphores(signal_semaphore);
 
 	std::lock_guard lock(cn->psc.mutex);
 	cn->wivrn_bundle->device.resetFences(*cn->psc.images[index].fence);
 	{
 		scoped_lock lock(vk->queue_mutex);
 		cn->wivrn_bundle->queue.submit(submit_info, *cn->psc.images[index].fence);
+	}
+	for (auto & encoder: cn->encoders)
+	{
+		encoder->PostSubmit();
 	}
 
 	assert(cn->psc.images[index].status == image_acquired);

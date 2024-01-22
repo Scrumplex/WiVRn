@@ -27,6 +27,7 @@ option(WIVRN_BUILD_DISSECTOR "Build Wireshark dissector" OFF)
 
 auto_option(WIVRN_USE_NVENC "Enable nvenc (Nvidia) hardware encoder" AUTO)
 auto_option(WIVRN_USE_VAAPI "Enable vaapi (AMD/Intel) hardware encoder" AUTO)
+option(WIVRN_USE_VULKAN_ENCODE "Enable vulkan video encoder" ON)
 auto_option(WIVRN_USE_X264 "Enable x264 software encoder" AUTO)
 
 option(ENABLE_COLOURED_OUTPUT "Always produce ANSI-coloured output (GNU/Clang only)." ON)
