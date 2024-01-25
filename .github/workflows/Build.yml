@@ -46,6 +46,7 @@ jobs:
         -DWIVRN_USE_VAAPI=ON
         -DWIVRN_USE_X264=ON
         -DWIVRN_USE_NVENC=ON
+        -DWIVRN_USE_VULKAN_ENCODE=ON
         -DWIVRN_USE_SYSTEM_BOOST=OFF
 
     - name: Package build dependencies
