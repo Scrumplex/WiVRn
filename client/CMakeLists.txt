@@ -77,7 +77,8 @@ else()
     file(CREATE_LINK ${CMAKE_SOURCE_DIR}/assets ${CMAKE_BINARY_DIR}/share/wivrn/assets SYMBOLIC)
 endif()
 
-target_sources(wivrn PRIVATE
+# target_sources(wivrn PRIVATE
+add_library(wivrn-imgui STATIC
     ${imgui_SOURCE_DIR}/imgui.cpp
     ${imgui_SOURCE_DIR}/imgui_draw.cpp
     ${imgui_SOURCE_DIR}/imgui_tables.cpp
@@ -89,11 +90,17 @@ target_sources(wivrn PRIVATE
     ${implot_SOURCE_DIR}/implot_items.cpp
 )
 
-target_include_directories(wivrn PRIVATE ${imgui_SOURCE_DIR})
-target_include_directories(wivrn PRIVATE ${implot_SOURCE_DIR})
+target_include_directories(wivrn-imgui PUBLIC ${imgui_SOURCE_DIR} ${implot_SOURCE_DIR})
+target_compile_definitions(wivrn-imgui PUBLIC IMGUI_USE_WCHAR32 IMGUI_ENABLE_FREETYPE)
+target_compile_features(wivrn-imgui PRIVATE cxx_std_20)
+target_link_libraries(wivrn-imgui FreetypeHarfbuzz)
+target_link_libraries(wivrn wivrn-imgui)
+
+# target_include_directories(wivrn PRIVATE ${imgui_SOURCE_DIR})
+# target_include_directories(wivrn PRIVATE ${implot_SOURCE_DIR})
 # target_compile_definitions(wivrn PRIVATE "IMGUI_USER_CONFIG=\"render/imgui_config.h\"")
-target_compile_definitions(wivrn PRIVATE IMGUI_USE_WCHAR32)
-target_compile_definitions(wivrn PRIVATE IMGUI_ENABLE_FREETYPE)
+# target_compile_definitions(wivrn PRIVATE IMGUI_USE_WCHAR32)
+# target_compile_definitions(wivrn PRIVATE IMGUI_ENABLE_FREETYPE)
 # target_compile_definitions(wivrn PRIVATE IMGUI_DISABLE_OBSOLETE_FUNCTIONS) # incompatible with implot
 # target_compile_definitions(wivrn PRIVATE IMGUI_ENABLE_FREETYPE_LUNASVG)
 
@@ -156,4 +163,3 @@ if(USE_ANDROID_VALIDATION_LAYER)
 
     target_link_libraries(wivrn vvl1 vvl2) # Hack to get gradle to package the validation layer in the APK
 endif()
-

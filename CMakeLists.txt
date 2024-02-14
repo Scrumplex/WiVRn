@@ -169,7 +169,7 @@ foreach(TARGET_NAME wivrn wivrn-server wivrn-common)
             target_compile_options(${TARGET_NAME} PRIVATE -Werror)
         endif()
 
-        target_compile_options(${TARGET_NAME} PRIVATE -Wno-missing-field-initializers -Wno-unused-parameter -Wno-comment -Wno-unused-variable -Wno-sign-compare
+        target_compile_options(${TARGET_NAME} PRIVATE -Wno-missing-field-initializers -Wno-unused-parameter -Wno-comment -Wno-unused-variable -Wno-sign-compare -Wno-array-bounds -Wno-stringop-overflow
             $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wno-volatile>
             $<$<COMPILE_LANG_AND_ID:CXX,Clang>:-Wno-deprecated-volatile -Wno-unneeded-internal-declaration -Wno-c99-extensions -Wno-unused-private-field>
         )
