@@ -115,6 +115,16 @@ android {
     flavorDimensions "device"
 
     productFlavors {
+        lynx {
+            dimension "device"
+            externalNativeBuild {
+                cmake {
+                    abiFilters 'arm64-v8a'
+                    // runtime expects shared libstdc++ in path
+                    arguments '-DANDROID_STL=c++_shared'
+                }
+            }
+        }
         pico {
             dimension "device"
             externalNativeBuild {

@@ -163,9 +163,12 @@ if(USE_ANDROID_VALIDATION_LAYER)
 
     add_library(vvl1 SHARED IMPORTED)
     set_property(TARGET vvl1 PROPERTY IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/Vulkan-ValidationLayer/${CMAKE_ANDROID_ARCH_ABI}/libVkLayer_khronos_validation.so)
-    add_library(vvl2 SHARED IMPORTED)
-    set_property(TARGET vvl2 PROPERTY IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/Vulkan-ValidationLayer/${CMAKE_ANDROID_ARCH_ABI}/libc++_shared.so)
+    target_link_libraries(wivrn vvl1) # Hack to get gradle to package the validation layer in the APK
+    if (ANDROID_STL STREQUAL "c++_static")
+        add_library(vvl2 SHARED IMPORTED)
+        set_property(TARGET vvl2 PROPERTY IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/Vulkan-ValidationLayer/${CMAKE_ANDROID_ARCH_ABI}/libc++_shared.so)
+    target_link_libraries(wivrn vvl2)
+    endif()
 
-    target_link_libraries(wivrn vvl1 vvl2) # Hack to get gradle to package the validation layer in the APK
 endif()
 
